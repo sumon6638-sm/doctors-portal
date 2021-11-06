@@ -25,8 +25,11 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { Button } from '@mui/material';
+import ScheduleIcon from '@mui/icons-material/Schedule';
+import HomeIcon from '@mui/icons-material/Home';
+import useAuth from '../../../hooks/useAuth';
 
 const drawerWidth = 240;
 
@@ -117,6 +120,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Navigation = () => {
 
+    const {user, logOut} = useAuth();
+
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -168,8 +173,18 @@ const Navigation = () => {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+            {
+                user?.email ?
+                    <MenuItem onClick={logOut}>Logout</MenuItem>
+                    :
+                    <Link to='/login' style={{ textDecoration: 'none', color: 'black' }}>
+                        <MenuItem onClick={handleMenuClose}>Login</MenuItem>
+                    </Link>
+            }
+
+            <Link to='/register' style={{ textDecoration: 'none', color: 'black' }}>
+                <MenuItem onClick={handleMenuClose}>Registration</MenuItem>
+            </Link>
         </Menu>
     );
 
@@ -240,11 +255,11 @@ const Navigation = () => {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        Doctor's Portal
+                        <Link style={{textDecoration: 'none', color: 'white'}} to='/'>Doctor's Portal</Link>
                     </Typography>
-                    <Link to='/appointment'>
+                    <NavLink to='/appointment' style={{ textDecoration: 'none', color: 'white' }}>
                         <Button variant='h5'>Appointment</Button>
-                    </Link>
+                    </NavLink>
                     
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -252,7 +267,7 @@ const Navigation = () => {
                             <SearchIconWrapper>
                                 <SearchIcon />
                             </SearchIconWrapper>
-                            <StyledInputBase
+                            <StyledInputBase style={{marginTop: '3px'}}
                                 placeholder="Search…"
                                 inputProps={{ 'aria-label': 'search' }}
                             />
@@ -297,6 +312,8 @@ const Navigation = () => {
                     </Box>
                 </Toolbar>
             </AppBar>
+            {renderMobileMenu}
+            {renderMenu}
             <Drawer
                 sx={{
                     width: drawerWidth,
@@ -321,14 +338,34 @@ const Navigation = () => {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+                    <ListItem button key='Home'>
+                        <Link to='/home' style={{textDecoration: 'none', color: 'black', display: 'flex'}}>
+                            <ListItemIcon><HomeIcon /> </ListItemIcon>
+                            <ListItemText style={{marginTop: 0}} primary='HOME'></ListItemText>
+                        </Link>
+                    </ListItem>
+
+                    <ListItem button key='Appointment'>
+                        <Link to='/appointment' style={{ textDecoration: 'none', color: 'black', display: 'flex' }}>
+                            <ListItemIcon><ScheduleIcon /> </ListItemIcon>
+                            <ListItemText style={{ marginTop: 0 }} primary='APPOINTMENT'></ListItemText>
+                        </Link>
+                    </ListItem>
+
+                    <ListItem button key='Appointment'>
+                        <Link to='/appointment' style={{ textDecoration: 'none', color: 'black', display: 'flex' }}>
+                            <ListItemIcon><ScheduleIcon /> </ListItemIcon>
+                            <ListItemText style={{ marginTop: 0 }} primary='Appointment'></ListItemText>
+                        </Link>
+                    </ListItem>
+                    {/* {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
                         <ListItem button key={text}>
                             <ListItemIcon>
                                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                             </ListItemIcon>
                             <ListItemText primary={text} />
                         </ListItem>
-                    ))}
+                    ))} */}
                 </List>
                 <Divider />
                 <List>
