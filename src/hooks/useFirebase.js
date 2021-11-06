@@ -9,6 +9,7 @@ const useFirebase = () => {
     const [user, setUser] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [authError, setAuthError] = useState('');
+    const [admin, setAdmin] = useState(false);
 
     const auth = getAuth();
 
@@ -23,6 +24,9 @@ const useFirebase = () => {
                 // user jokhon register korbe 2khn name ta k set kore dite hbe... login er khetre set korte hbe na..
                 const newUser = { email, displayName: name, photoURL: image };
                 setUser(newUser);
+
+                // save user to the database
+                saveUser(email, name, 'POST');
 
                 // after creation send name to firebase i should update profile other wise i can't see the name without reload my website.. it's have another method --> window.location.reload() but standard method is updateProfile
                 updateProfile(auth.currentUser, {
@@ -63,6 +67,9 @@ const useFirebase = () => {
                 const destination = location?.state?.from || '/';
                 history.replace(destination);
                 const user = result.user;
+                // save user to the database
+                saveUser(user.email, user.displayName, 'PUT')
+
                 setAuthError('');
             }).catch((error) => {
                 setAuthError(error.message);
@@ -83,6 +90,13 @@ const useFirebase = () => {
         return () => unSubscribe;
     }, [])
 
+    // checking a user is he admin or not
+    useEffect(() => {
+        fetch(`http://localhost:5000/users/${user.email}`)
+            .then(res => res.json())
+            .then(data => setAdmin(data.admin));
+    },[user.email])
+
     const logOut = () => {
         setIsLoading(true);
         signOut(auth).then(() => {
@@ -91,6 +105,18 @@ const useFirebase = () => {
             // An error happened.
         })
         .finally(()=>setIsLoading(false));
+    }
+
+    const saveUser = (email, displayName, method) => {
+        const user = { email, displayName };
+        fetch('http://localhost:5000/users', {
+            method: method,
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+            .then()
     }
 
     return {
