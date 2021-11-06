@@ -286,17 +286,24 @@ const Navigation = () => {
                                 <NotificationsIcon />
                             </Badge>
                         </IconButton>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
+                        {
+                            user?.photoURL
+                                ?
+                                <img onClick={handleProfileMenuOpen} src={user.photoURL} style={{ height: '40px', width: '40px', marginLeft: '10px', borderRadius: '50%' }} alt="" />
+                                :
+                                <IconButton
+                                    size="large"
+                                    edge="end"
+                                    aria-label="account of current user"
+                                    aria-controls={menuId}
+                                    aria-haspopup="true"
+                                    onClick={handleProfileMenuOpen}
+                                    color="inherit"
+                                >
+                                    <AccountCircle />
+                                </IconButton>
+                        }
+                        
                     </Box>
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
@@ -327,7 +334,15 @@ const Navigation = () => {
                 anchor="left"
                 open={open}
             >
-                <DrawerHeader>
+                <DrawerHeader sx={{ p: 0, ml: 0 }}>
+                    {
+                        user?.photoURL && <img src={user.photoURL} alt="" style={{ height: '50px', width: '50px', borderRadius:'50%' }} />
+                    }
+
+                    <Typography variant='h6' sx={{ ml:1}}>
+                        {user.displayName}
+                    </Typography>
+
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === "ltr" ? (
                             <ChevronLeftIcon />
@@ -358,14 +373,6 @@ const Navigation = () => {
                             <ListItemText style={{ marginTop: 0 }} primary='Appointment'></ListItemText>
                         </Link>
                     </ListItem>
-                    {/* {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))} */}
                 </List>
                 <Divider />
                 <List>
