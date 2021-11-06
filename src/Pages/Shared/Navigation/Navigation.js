@@ -30,6 +30,7 @@ import { Button } from '@mui/material';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import HomeIcon from '@mui/icons-material/Home';
 import useAuth from '../../../hooks/useAuth';
+import Dashboard from '../../Dashboard/Dashboard/Dashboard';
 
 const drawerWidth = 240;
 
@@ -175,16 +176,22 @@ const Navigation = () => {
         >
             {
                 user?.email ?
-                    <MenuItem onClick={logOut}>Logout</MenuItem>
+                    <Box>
+                        <MenuItem onClick={logOut}>Logout</MenuItem>
+                        <NavLink style={{textDecoration: 'none', color: 'white'}} to='/dashboard'>
+                            <Button style={{color: 'black'}}>Dashboard</Button>
+                        </NavLink>
+                    </Box>
                     :
-                    <Link to='/login' style={{ textDecoration: 'none', color: 'black' }}>
-                        <MenuItem onClick={handleMenuClose}>Login</MenuItem>
-                    </Link>
+                    <Box>
+                        <Link to='/login' style={{ textDecoration: 'none', color: 'black' }}>
+                            <MenuItem onClick={handleMenuClose}>Login</MenuItem>
+                        </Link>
+                        <Link to='/register' style={{ textDecoration: 'none', color: 'black' }}>
+                            <MenuItem onClick={handleMenuClose}>Registration</MenuItem>
+                        </Link>
+                    </Box>
             }
-
-            <Link to='/register' style={{ textDecoration: 'none', color: 'black' }}>
-                <MenuItem onClick={handleMenuClose}>Registration</MenuItem>
-            </Link>
         </Menu>
     );
 
