@@ -30,7 +30,6 @@ import { Button } from '@mui/material';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import HomeIcon from '@mui/icons-material/Home';
 import useAuth from '../../../hooks/useAuth';
-import Dashboard from '../../Dashboard/Dashboard/Dashboard';
 
 const drawerWidth = 240;
 

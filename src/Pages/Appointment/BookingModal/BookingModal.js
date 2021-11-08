@@ -48,7 +48,7 @@ const BookingModal = ({ openBooking, handleBookingClose, booking, date, setBooki
 
         // send data to the server
         // console.log(appointment);
-        fetch('http://localhost:5000/appointments', {
+        fetch('https://lit-lowlands-55954.herokuapp.com/appointments', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
