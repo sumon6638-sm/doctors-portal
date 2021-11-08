@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import initializeFirebase from '../Pages/Login/Login/Firebase/firebase.init';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, updateProfile, signOut } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, updateProfile, getIdToken, signOut } from "firebase/auth";
 
 // initialize firebase app
 initializeFirebase();
@@ -10,6 +10,7 @@ const useFirebase = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [authError, setAuthError] = useState('');
     const [admin, setAdmin] = useState(false);
+    const [token, setToken] = useState('');
 
     const auth = getAuth();
 
@@ -64,13 +65,13 @@ const useFirebase = () => {
         setIsLoading(true);
         signInWithPopup(auth, googleProvider)
             .then((result) => {
-                const destination = location?.state?.from || '/';
-                history.replace(destination);
                 const user = result.user;
                 // save user to the database
                 saveUser(user.email, user.displayName, 'PUT')
-
                 setAuthError('');
+
+                const destination = location?.state?.from || '/';
+                history.replace(destination);
             }).catch((error) => {
                 setAuthError(error.message);
             }).finally(() => setIsLoading(false));
@@ -81,6 +82,10 @@ const useFirebase = () => {
         const unSubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUser(user);
+                getIdToken(user).then(idToken => {
+                    // console.log(idToken);
+                    setToken(idToken);
+                })
             }
             else {
                 setUser({})
@@ -107,6 +112,7 @@ const useFirebase = () => {
         .finally(()=>setIsLoading(false));
     }
 
+    // save user to my database...
     const saveUser = (email, displayName, method) => {
         const user = { email, displayName };
         fetch('http://localhost:5000/users', {
@@ -121,6 +127,8 @@ const useFirebase = () => {
 
     return {
         user,
+        admin,
+        token,
         isLoading,
         authError,
         registerUser,

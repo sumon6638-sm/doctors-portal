@@ -17,7 +17,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
     Link,
@@ -26,6 +25,8 @@ import {
 import DashboardHome from '../DashboardHome/DashboardHome';
 import MakeAdmin from '../MakeAdmin/MakeAdmin';
 import AddDoctor from '../AddDoctor/AddDoctor';
+import useAuth from '../../../hooks/useAuth';
+import AdminRoute from '../../Login/AdminRoute/AdminRoute';
 
 const drawerWidth = 200;
 
@@ -33,6 +34,7 @@ function Dashboard(props) {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
     let { path, url } = useRouteMatch();
+    const { admin } = useAuth();
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -51,13 +53,18 @@ function Dashboard(props) {
                 <Button color='inherit'>Dashboard</Button>
             </Link>
 
-            <Link to={`${url}/makeAdmin`} style={{ textDecoration: 'none' }}>
-                <Button color='inherit'>Make Admin</Button>
-            </Link>
+            {
+                admin &&
+                <Box>
+                    <Link to={`${url}/makeAdmin`} style={{ textDecoration: 'none' }}>
+                        <Button color='inherit'>Make Admin</Button>
+                    </Link>
 
-            <Link to={`${url}/addDoctor`} style={{ textDecoration: 'none' }}>
-                <Button color='inherit'>Add Doctor</Button>
-            </Link>
+                    <Link to={`${url}/addDoctor`} style={{ textDecoration: 'none' }}>
+                        <Button color='inherit'>Add Doctor</Button>
+                    </Link>
+                </Box>
+            }
 
             <List>
                 {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
@@ -140,13 +147,13 @@ function Dashboard(props) {
                         <DashboardHome></DashboardHome>
                     </Route>
 
-                    <Route path={`${path}/makeAdmin`}>
+                    <AdminRoute path={`${path}/makeAdmin`}>
                         <MakeAdmin></MakeAdmin>
-                    </Route>
+                    </AdminRoute>
 
-                    <Route path={`${path}/addDoctor`}>
+                    <AdminRoute path={`${path}/addDoctor`}>
                         <AddDoctor></AddDoctor>
-                    </Route>
+                    </AdminRoute>
                 </Switch>
 
                 {/* <Grid container spacing={2}>
