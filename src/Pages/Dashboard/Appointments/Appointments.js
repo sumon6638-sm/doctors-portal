@@ -15,11 +15,11 @@ const Appointments = ({date}) => {
     const [appointments, setAppointments] = useState([])
 
     useEffect(() => {
-        /* old --> 
-        const url = `https://lit-lowlands-55954.herokuapp.com/appointments?email=${user.email}&date=${date}` */
+        // old --> 
+        const url = `https://lit-lowlands-55954.herokuapp.com/appointments?email=${user.email}&date=${date}`
 
-        // new --> 
-        const url = `https://lit-lowlands-55954.herokuapp.com/appointments?email=${user.email}&date=${date.toLocalDateString}`
+        /* // new --> 
+        const url = `https://lit-lowlands-55954.herokuapp.com/appointments?email=${user.email}&date=${date.toLocalDateString()}` */
         fetch(url, {
             headers: {
                 'authorization': `Bearer ${token}`
