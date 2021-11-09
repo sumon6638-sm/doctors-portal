@@ -19,7 +19,7 @@ const Appointments = ({date}) => {
         const url = `https://lit-lowlands-55954.herokuapp.com/appointments?email=${user.email}&date=${date}` */
 
         // new --> 
-        const url = `https://lit-lowlands-55954.herokuapp.com/appointments?email=${user.email}&date=${date.toLocalDateString()}`
+        const url = `https://lit-lowlands-55954.herokuapp.com/appointments?email=${user.email}&date=${date.toLocalDateString}`
         fetch(url, {
             headers: {
                 'authorization': `Bearer ${token}`
